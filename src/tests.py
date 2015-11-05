@@ -1,17 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+import os
 import json
 import unittest
 from dateutil import parser as dtparser
-from utils import get_hashtag, _clean_string, update_or_build_graph, update_or_build_graph, calculate_avg_degree
+from utils import get_hashtag, _clean_string, update_or_build_graph, update_or_build_graph, calculate_avg_degree, shuffle_graph
 
+
+FILE_PATH = os.path.dirname(os.path.abspath(__file__))
+FIXTURE_ONE_PATH =  os.path.join(FILE_PATH, "fixtures/fixture1.json")
+FIXTURE_TWO_PATH =  os.path.join(FILE_PATH, "fixtures/fixture2.json")
 
 class FeatureOneTestCase(unittest.TestCase):
 
     def setUp(self):
-        with open("./fixtures/fixture1.json") as fixture:
+        with open(FIXTURE_ONE_PATH) as fixture:
             for line in fixture:
                 json_line = json.loads(line)
                 self.test_tweet_text = json_line['text']
@@ -23,7 +27,6 @@ class FeatureOneTestCase(unittest.TestCase):
         self.hashtag_tweet = None
 
     def test_hashtag_count(self):
-
         hashtags = get_hashtag(self.test_tweet_text)
         self.assertEqual(len(hashtags), 2, 'incorrect hashtags')
 
@@ -39,7 +42,7 @@ class FeatureOneTestCase(unittest.TestCase):
 class FeatureTwoTestCase(unittest.TestCase):
 
     def setUp(self):
-        with open("./fixtures/fixture2.json") as fixture:
+        with open(FIXTURE_TWO_PATH) as fixture:
             self.tweet_list = []
             for line in fixture:
                 self.tweet_list.append(json.loads(line))
@@ -61,8 +64,9 @@ class FeatureTwoTestCase(unittest.TestCase):
                 self.graph = update_or_build_graph(
                     self.graph, hash_tags, created_at)
                 # print self.graph
-                self.avg_degree_list.append(calculate_avg_degree(self.graph))
-        print self.avg_degree_list
+            self.graph = shuffle_graph(self.graph, created_at)
+            self.avg_degree_list.append(calculate_avg_degree(self.graph))
+        #print self.avg_degree_list
         self.assertEqual(self.avg_degree_list, [1.0, 2.0, 2.0, 2.0, 1.67],
                          'incorrect average degree')
 

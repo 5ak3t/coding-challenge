@@ -18,7 +18,7 @@ A Twitter hashtag graph is a graph connecting all the hashtags that have been me
 
 2. Install requirements - `pip install -r requirements.txt`
 
-3. Run Tests - `cd coding-challenge/src; python tests.py` Test Fixtures are located in `coding-challenge/src/fixtures`
+3. Run Tests - `python src/tests.py` Test Fixtures are located in `coding-challenge/src/fixtures`
 
 4. chmod +x coding-challenge/run.sh
 

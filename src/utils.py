@@ -86,7 +86,6 @@ def update_or_build_graph(graph, hash_tags, created_at):
 
     Flink <-> Spark
 
-    where datetime is the python object, fetched from the hashtag and is the weight of the edge
 {
     "#Apache": {
     "#Storm": "datetime.datetime(2015, 10, 29, 17, 51, 30, tzinfo=tzutc())",
@@ -126,6 +125,17 @@ def update_or_build_graph(graph, hash_tags, created_at):
                         graph[tag] = dict()
                     graph[tag][single_hash] = created_at
 
+    return graph
+
+    
+def shuffle_graph(graph, created_at):
+
+    """
+    Input - Graph Object
+
+    Output - Returns the graph object, post removal of edges that were created 60 seconds ago
+    """
+
     # remove edges that were created 60 seconds ago
     for top_k, top_v in graph.items():
         for k, v in top_v.items():
@@ -142,7 +152,7 @@ def calculate_avg_degree(graph):
     """
     Input - Graph Object
 
-    Output - Returns the average degree with precision of 2 digits.
+    Output - Returns the average degree with precision of 2 decimal digits.
     """
     sum = 0
     for tag in graph.keys():

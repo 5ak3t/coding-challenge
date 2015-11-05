@@ -15,7 +15,7 @@ import sys
 import json
 import datetime
 from dateutil import parser as dtparser
-from utils import _clean_string, get_hashtag, calculate_avg_degree, update_or_build_graph
+from utils import _clean_string, get_hashtag, calculate_avg_degree, update_or_build_graph, shuffle_graph
 
 
 def main(argv):
@@ -36,8 +36,9 @@ def main(argv):
                 hash_tags = get_hashtag(cleaned_line)
                 if hash_tags:
                     graph = update_or_build_graph(graph, hash_tags, created_at)
-                    avg_degree =  calculate_avg_degree(graph)
-                    out_put.write(str(avg_degree)+"\n")
+                graph = shuffle_graph(graph, created_at)
+                avg_degree =  calculate_avg_degree(graph)
+                out_put.write(str(avg_degree)+"\n")
             except Exception as e:
                 # this except block is here to handle the following sample limit lines
                 # {"limit":{"track":19,"timestamp_ms":"1446218985758"}}
