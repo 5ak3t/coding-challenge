@@ -60,7 +60,7 @@ class FeatureTwoTestCase(unittest.TestCase):
             created_at = dtparser.parse(tweet["created_at"])
             clean, cleaned_line = _clean_string(tweet['text'])
             hash_tags = get_hashtag(cleaned_line)
-            if hash_tags:
+            if hash_tags and len(hash_tags) > 1:
                 self.graph = update_or_build_graph(
                     self.graph, hash_tags, created_at)
                 # print self.graph

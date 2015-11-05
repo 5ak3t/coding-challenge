@@ -34,11 +34,16 @@ def main(argv):
                 created_at = dtparser.parse(line_json["created_at"])
                 clean, cleaned_line = _clean_string(line_json['text'])
                 hash_tags = get_hashtag(cleaned_line)
-                if hash_tags:
+                
+                # update graph if there are more than one hashtags
+                if hash_tags and len(hash_tags) > 1:
                     graph = update_or_build_graph(graph, hash_tags, created_at)
+                    
+                # update graph to remove edges created more than 60 seconds ago
                 graph = shuffle_graph(graph, created_at)
                 avg_degree =  calculate_avg_degree(graph)
                 out_put.write(str(avg_degree)+"\n")
+                
             except Exception as e:
                 # this except block is here to handle the following sample limit lines
                 # {"limit":{"track":19,"timestamp_ms":"1446218985758"}}

@@ -115,15 +115,12 @@ def update_or_build_graph(graph, hash_tags, created_at):
 
 
     """
-
-    # update graph if number of hashtag is greater than one
-    if len(hash_tags) > 1:
-        for single_hash in hash_tags:
-            for tag in hash_tags:
-                if tag != single_hash:
-                    if not graph.has_key(tag):
-                        graph[tag] = dict()
-                    graph[tag][single_hash] = created_at
+    for single_hash in hash_tags:
+        for tag in hash_tags:
+            if tag != single_hash:
+                if tag not in graph.keys():
+                    graph[tag] = dict()
+                graph[tag][single_hash] = created_at
 
     return graph
 
